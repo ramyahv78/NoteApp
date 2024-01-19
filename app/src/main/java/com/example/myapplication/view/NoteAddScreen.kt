@@ -2,7 +2,9 @@ package com.example.myapplication.view
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.Button
 import androidx.compose.material3.DatePicker
 import androidx.compose.material3.DatePickerDialog
@@ -73,47 +75,50 @@ fun NoteAddScreen(navController: NavController) {
 
 
 
+    Box(contentAlignment = Alignment.Center, modifier = Modifier.fillMaxSize()) {
+        Column(
+            verticalArrangement = Arrangement.spacedBy(10.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
 
-    Column(
-        verticalArrangement = Arrangement.spacedBy(10.dp),
-        horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            TextField(
+                modifier = Modifier
+                    .clickable { showDatePicker = true },
+                enabled = false,
+                label = { Text("Select Date") },
+                value = selectedDate,
+                onValueChange = { selectedDate = it },
+                placeholder = {
+                    Text(text = "Enter Date")
 
-    ) {
-        TextField(
-            modifier = Modifier
-                .clickable { showDatePicker = true },
-            enabled = false,
-            label = { Text("Select Date") },
-            value = selectedDate,
-            onValueChange = { selectedDate = it },
-            placeholder = {
-                Text(text = "Enter Date")
+                },
 
-            },
-
-            )
-
-
-
-        TextField(
-            value = textNote.value, onValueChange = { textNote.value = it },
-            label = {
-                Text(
-                    text = "Enter Note"
                 )
-            },
-            maxLines = 5,
 
-            )
 
-        Button(onClick = { mainViewModel.saveData(selectedDate, textNote.value) }) {
-            Text(text = "Save")
+
+            TextField(
+                value = textNote.value, onValueChange = { textNote.value = it },
+                label = {
+                    Text(
+                        text = "Enter Note"
+                    )
+                },
+                maxLines = 5,
+
+                )
+
+            Button(onClick = { mainViewModel.saveData(selectedDate, textNote.value) }) {
+                Text(text = "Save")
+            }
         }
     }
     val result = mainViewModel.notLiveData.observeAsState().value
     result?.let {
         if (it) {
-            navController.navigate(NavigationScreens.NoteList.toString())
+            navController.navigate(NavigationScreens.NoteList.toString()) {
+                popUpTo(NavigationScreens.NoteAdd.toString())
+            }
             textNote.value = ""
             selectedDate = ""
         }

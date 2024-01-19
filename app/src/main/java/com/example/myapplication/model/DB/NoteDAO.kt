@@ -10,9 +10,10 @@ import androidx.room.Query
 interface NoteDAO {
     @Insert
     suspend fun saveNote(noteEntity: NoteEntity)
+
     @Delete
     suspend fun deleteAll(noteEntity: NoteEntity)
 
     @Query("SELECT * FROM note_table")
-    fun getAllNotes():LiveData<List<NoteEntity>>
+    suspend fun getAllNotes(): List<NoteEntity>
 }

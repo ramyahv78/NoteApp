@@ -19,6 +19,9 @@ class MainViewModel @Inject constructor(private val repository: NoteRepo) : View
     private val _noteLiveData = MutableLiveData<Boolean>(false)
     val notLiveData: LiveData<Boolean> = _noteLiveData
 
+    private val _noteList = MutableLiveData<List<NoteEntity>>()
+    val notList: LiveData<List<NoteEntity>> = _noteList
+
 
     fun saveData(date: String, note: String) {
         viewModelScope.launch(Dispatchers.IO) {
@@ -31,7 +34,7 @@ class MainViewModel @Inject constructor(private val repository: NoteRepo) : View
     fun getAllNotes() {
         viewModelScope.launch {
             repository.getAllNotes().let {
-
+                _noteList.postValue(it)
             }
         }
     }

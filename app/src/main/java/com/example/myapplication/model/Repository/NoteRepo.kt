@@ -11,7 +11,7 @@ class NoteRepo @Inject constructor(private val noteDAO: NoteDAO) {
         noteDAO.saveNote(note)
     }
 
-    fun getAllNotes(): LiveData<List<NoteEntity>> {
+    suspend fun getAllNotes(): List<NoteEntity> {
         return noteDAO.getAllNotes()
     }
 }
